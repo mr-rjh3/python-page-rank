@@ -90,4 +90,4 @@ if __name__ == "__main__":
     # if the user specified to dump the page rank to a JSON file, do so
     if(args.dump):
         with open("pageRank.json", 'w') as f:
-            json.dump(pageRankDict, f)
+            json.dump(pageRankDict, f, indent=4)
