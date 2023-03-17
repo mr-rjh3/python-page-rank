@@ -64,17 +64,30 @@ if __name__ == "__main__":
     parser.add_argument("-i", "--maxiteration", help="Maximum number of iterations the program will complete.", default=3, type=int)
     parser.add_argument("-l", "--arglambda", help="The lambda / random surfer parameter value.", default=0.85, type=float)
     parser.add_argument("-t", "--threshold", help="The threshold value. The program will stop once the total difference in all nodes page rank change is less than this value.", default=0.0001, type=float)
-    parser.add_argument("-n", "--nodes", help="The Node IDs that we want to get page rank from. Usage: -n/--nodes node1 node2 node3 ...", default=[], nargs='+', type=int, required=True) # nargs='+' means 1 or more
+    parser.add_argument("-n", "--nodes", help="The Node IDs that we want to get page rank from. Usage: -n/--nodes node1 node2 node3 ...", default=[], nargs='+', type=int) # nargs='+' means 1 or more
     parser.add_argument("-d", "--dump", help="Dumps page rank to JSON file when True.",action="store_true", default=False)
 
     args = parser.parse_args()
-    print("Finding Page Rank for nodes: ", args.nodes, " with max iterations: ", args.maxiteration, " lambda: ", args.arglambda, " threshold: ", args.threshold)
+    # Conditional print statements
+    if(len(args.nodes) == 0):
+        print("Finding Page Rank with max iterations: ", args.maxiteration, " lambda: ", args.arglambda, " threshold: ", args.threshold)
+    else:
+        print("Finding Page Rank for nodes: ", args.nodes, " with max iterations: ", args.maxiteration, " lambda: ", args.arglambda, " threshold: ", args.threshold)
+    
+    # Read nodes from file and store them in a dictionary with the key being the node number => N : (Nodes that point to N, Nodes that N points to)
     nodeDict = readNodesfromFile("web-Stanford.txt")
+
+    # Calculate page rank and store it in a dictionary with the key being the node number => N : Page Rank
     pageRankDict, iteration = pageRank(nodeDict, args.maxiteration, args.arglambda, args.threshold)
-    print("Page Rank for nodes after ", iteration, " iterations:")
-    print("Node:\tPage Rank:")
-    for node in args.nodes:
-        print("{}\t{}".format(node, pageRankDict[node]))
+    print("Page Rank found after ", iteration, " iterations.")
+
+    # if the user specified nodes to get page rank from, print them out
+    if(len(args.nodes) > 0):
+        print("Node:\tPage Rank:")
+        for node in args.nodes:
+            print("{}\t{}".format(node, pageRankDict[node]))
+
+    # if the user specified to dump the page rank to a JSON file, do so
     if(args.dump):
         with open("pageRank.json", 'w') as f:
             json.dump(pageRankDict, f)
