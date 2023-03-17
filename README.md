@@ -1,7 +1,7 @@
 # python-page-rank
 
 ## Purpose
-Generates the page rank from a dataset and displays the page rank of specified nodes. Also will dump each node's page rank to a JSON file if desired.
+Generates the page rank from the Stanford web graph from 2002 dataset and displays the page rank of specified nodes. Also will dump each node's page rank to a JSON file if desired.
 
 ## Usage
 1. Download and install [python](https://www.python.org/downloads/)
